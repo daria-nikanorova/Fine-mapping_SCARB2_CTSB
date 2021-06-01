@@ -67,7 +67,7 @@ gcta64 --cojo-file sumstats_subsets/chromosomes/chr4_for_GCTA.tsv --bfile LD_ref
 
 We next applied statistical fine-mapping methods that are used to perform variable selection in multiple regression (y = Xb + e). 
 
-The methods implemented here (FINEMAP and SuSiE) are particularly well-suited to settings where some of the X variables are highly correlated, which is a key feature of GWAS results, where variants are highly correlated in LD-blocks. 
+FINEMAP and SuSiE are suitable to models where X variables are highly correlated, which is a key feature of GWAS results, where variants are highly correlated in LD-blocks. 
 
 The output of the fitting procedures is a number of credible sets (cs), set of  variables that are each associated with the response and together can explain 95% of association of the locus with PD risk.
 
@@ -83,7 +83,7 @@ We ran FINEMAP with number of causal variants at each locus equals to the number
 
 ### SuSiE
 
-Next we applied SuSiE. Since it is a package in R, you can learn how to carry out this step in ```run_susie.Rmd``` file.
+Next we applied SuSiE. Since it is a package in R, you can learn how to carry out this step in ```run_susie.html``` file.
 
 The results of finemapping can be visualized with LocusZoom function ():
 
@@ -114,9 +114,7 @@ Also it generates a list of SNPs that were found by COLOC to drive the colocaliz
 
 Here we can see 4 SNPs that drive colocalization between SCARB2 region and  brain.
 
-Most part of datasets, however, were automatically obtained from eQTL Catalogue with ```tabix``` function in R (see run_coloc_eqtl_catalogue.R)
-
-Sometimes we got a lot of SNPs predicted by coloc to be significant dreivers of colocalization. In order to resolve LD structure between them and find only credible set of SNPs that drive the association, we applied SuSiE+COLOC framework (see run coloc_susie.Rmd)
+Sometimes we got a lot of SNPs predicted by coloc to be significant dreivers of colocalization. In order to resolve LD structure between them and find only credible set of SNPs that drive the association, we applied SuSiE+COLOC framework (see run make_coloc_susie.html)
 
 
 ### SMR 
