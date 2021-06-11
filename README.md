@@ -108,7 +108,7 @@ Colocalization analysis aims at finding the association between variants and gen
 
 ### COLOC
 
-We applied colocalization analysis with ~100 datasets of eQTL data from different tissues. For them ```make_coloc.sh``` was written, which launched ```make_coloc.R``` and outputs a dataframe with colocalization results for esch gene in a locus. 
+We applied colocalization analysis with ~100 datasets of eQTL data from different tissues. We wrote a bash script ```make_coloc.sh``` , which loops over eQTL datasets, launches ```make_coloc.R``` and outputs a dataframe with colocalization results for each gene in a locus. 
 
 ```console
 ./make_coloc.sh path_to_gwas path_to_dir_with_eQTLs output_path
