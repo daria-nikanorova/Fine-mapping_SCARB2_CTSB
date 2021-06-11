@@ -1,0 +1,111 @@
+---
+title: "Finemapping with SuSiE"
+author: "Daria"
+date: "6/1/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+if (!require("dplyr")) install.packages("dplyr")
+if (!require("susieR")) install.packages("susieR")
+if (!require("coloc")) install.packages("coloc")
+if (!require("magrittr")) install.packages("magrittr")
+```
+
+# Tutorial overview
+
+This tutorial is aimed at running finemapping analysis with SuSiE in R.
+We will need summary statistics file as well as precomputed LD matrix (it can be easily done with PLINK) and rs of SNPs from the matrix:
+
+```{r}
+gwas_path <- "/media/daria/DaryaNika/Fine_mapping/sumstats_subsets/ctsb_1000kb_window.tsv"
+LD_path <- "/media/daria/DaryaNika/Fine_mapping/LD_reference/1000G_calculated_de_novo_matrix_1703/ctsb_1000kb_wo_rare.ld"
+LD_rs_path <- "/media/daria/DaryaNika/Fine_mapping/LD_reference/1000G_calculated_de_novo_matrix_1703/ctsb_1000kb_wo_rare.txt"
+
+gwas <- read.csv(gwas_path, sep = "\t")
+LD_rs <- read.table(LD_rs_path)
+LD <- read.table(LD_path, row.names = as.character(LD_rs$V1), col.names = as.character(LD_rs$V1))
+```
+
+Firsly let's format GWAS sumstats and LD matrix:
+```{r}
+# Replace NAs with 0 and turn LD into matrix
+LD <- LD %>% replace(is.na(.), 0)
+LD_matrix <- as.matrix(LD)
+
+# Check for complete cases
+gwas <- gwas[complete.cases(gwas), ]
+
+# Check for cases with beta = 0
+gwas <- gwas[gwas$b != 0, ]
+
+# Select required variables
+gwas <- gwas %>% 
+  mutate(s = N_cases / (N_cases + N_controls), varbeta = se^2) %>% 
+  dplyr::select(rsID, SNP, A1, A2, freq, b, se, p, bp, s, varbeta)
+```
+
+Now we can find beta of minor allele and minor allele frequency (MAF):
+
+```{r}
+# Find MA beta and MAF
+gwas$b_MA <- gwas$b
+gwas[gwas$freq > 0.50, ]$b_MA <- gwas[gwas$freq > 0.50, ]$b_MA *-1
+
+gwas$MAF <- gwas$freq
+gwas[gwas$freq > 0.50, ]$MAF <- 1 - gwas[gwas$freq > 0.50, ]$MAF
+```
+
+We can get rid of rare variants (maf < 1%) in order to improve quality of finemapping calculation. As we can see, there are 3631 common variants:
+
+```{r}
+# Select only SNPs with MAF >= 0.01 
+gwas <- gwas[gwas$MAF >= 0.01, ]
+
+nrow(gwas)
+```
+
+Finally we need to select only SNPs common for LD matrix and GWAS data
+```{r}
+gwas <- gwas[gwas$rsID %in% LD_rs$V1, ]
+```
+
+Now we can run SuSiE!
+
+```{r}
+named_beta <- extract2(gwas, 'b') %>% set_names(gwas$rsID)
+named_varbeta <- extract2(gwas, 'varbeta') %>% set_names(gwas$rsID)
+
+dataset1=list(beta=named_beta, 
+              varbeta=named_varbeta, 
+              s =gwas$s, 
+              type="cc", 
+              snp=as.character(gwas$rsID), 
+              LD=LD_matrix, 
+              position=gwas$bp)
+
+check_dataset(dataset1)
+
+S3=runsusie(dataset1, nref=503)
+```
+
+Now we will summarize the results, getting only SNPs from credible sets with their probability of being causal:
+
+```{r}
+SNPs <- lapply(S3$sets$cs, function(x) data.frame(SNP=names(x), variable=x))
+SNPs_number <- do.call(rbind, SNPs)
+
+probab <- summary(S3)$vars
+result <- inner_join(probab, SNPs_number, by="variable") %>% 
+  dplyr::select(SNP, variable_prob, cs) %>% 
+  dplyr::mutate(LD_reference = "1000G", .before=1)
+print(result)
+```
+
+We can write down a table with results!
+
+```{r}
+#write.table(result, "/media/daria/DaryaNika/Fine_mapping/susie_results/ctsb_susie_1000G.tsv", sep="\t", row.names = F, quote = F)
+```
+
