@@ -13,10 +13,17 @@ if (!require("coloc")) install.packages("coloc")
 if (!require("magrittr")) install.packages("magrittr")
 ```
 
+```{r echo = T, warning=FALSE, message=FALSE, eval=TRUE}
+library(dplyr)
+library(susieR)
+library(coloc)
+library(magrittr)
+```
+
 # Tutorial overview
 
 This tutorial is aimed at running finemapping analysis with SuSiE in R.
-We will need summary statistics file as well as precomputed LD matrix (it can be easily done with PLINK) and rs of SNPs from the matrix:
+We will need summary statistics file as well as precomputed LD matrix (it can be easily done with PLINK) and rs of SNPs from the matrix. Please, set your own paths for each file:
 
 ```{r}
 gwas_path <- "/media/daria/DaryaNika/Fine_mapping/sumstats_subsets/ctsb_1000kb_window.tsv"

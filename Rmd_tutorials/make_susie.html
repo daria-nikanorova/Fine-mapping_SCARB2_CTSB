@@ -355,9 +355,13 @@ pre code {
 </div>
 
 
+<pre class="r"><code>library(dplyr)
+library(susieR)
+library(coloc)
+library(magrittr)</code></pre>
 <div id="tutorial-overview" class="section level1">
 <h1>Tutorial overview</h1>
-<p>This tutorial is aimed at running finemapping analysis with SuSiE in R. We will need summary statistics file as well as precomputed LD matrix (it can be easily done with PLINK) and rs of SNPs from the matrix:</p>
+<p>This tutorial is aimed at running finemapping analysis with SuSiE in R. We will need summary statistics file as well as precomputed LD matrix (it can be easily done with PLINK) and rs of SNPs from the matrix. Please, set your own paths for each file:</p>
 <pre class="r"><code>gwas_path &lt;- &quot;/media/daria/DaryaNika/Fine_mapping/sumstats_subsets/ctsb_1000kb_window.tsv&quot;
 LD_path &lt;- &quot;/media/daria/DaryaNika/Fine_mapping/LD_reference/1000G_calculated_de_novo_matrix_1703/ctsb_1000kb_wo_rare.ld&quot;
 LD_rs_path &lt;- &quot;/media/daria/DaryaNika/Fine_mapping/LD_reference/1000G_calculated_de_novo_matrix_1703/ctsb_1000kb_wo_rare.txt&quot;
