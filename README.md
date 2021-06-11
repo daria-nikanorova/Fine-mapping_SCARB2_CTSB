@@ -21,7 +21,7 @@ In order to perform this analysis further workflow was implemented:
 
 In brief, we started from identification of independent variants with GCTA-COJO, following by statistical finemapping tools, such as FINEMAP and SuSiE. We continued with colocalization analysis via COLOC and Summary-based Mendelian Randomization (SMR). This approach allowed us to narrow down a number of the most likely SNPs that are responsible for asociation of these loci with PD risk.
 
-## Requirements
+## Requirements and sources
 * **R** (version > 3.6)
 * **PLINK 1.9** (https://www.cog-genomics.org/plink/1.9/) *Chang CC, Chow CC, Tellier LCAM, Vattikuti S, Purcell SM, Lee JJ (2015) Second-generation PLINK: rising to the challenge of larger and richer datasets*
 * **GCTA-COJO** (https://cnsgenomics.com/software/gcta/#Overview) *Yang et al. (2011) GCTA: a tool for Genome-wide Complex Trait Analysis. Am J Hum Genet. 88(1): 76-82*
