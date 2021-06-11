@@ -7,7 +7,7 @@ This project is aimed at identification of the most likely variants in SCARB2 an
 ### Objectives:
 
 * Calculation of correspondent LD-matrix (PLINK)
-* Detection of independent variants in studied loci
+* Detection of independent variants in studied loci (GCTA-COJO)
 * Application of statistical fine-mapping methods (FINEMAP, SuSiE)
 * Colocalization analysis (COLOC)
 * Implementation of Summary-based Mendelian Randomization (SMR)
