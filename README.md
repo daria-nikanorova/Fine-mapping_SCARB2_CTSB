@@ -1,6 +1,17 @@
 # Fine-mapping of SCARB2 and CTSB genes 
 
+### Aim:
+
 This project is aimed at identification of the most likely variants in SCARB2 and CTSB loci that drive the association with Parkinson's disease (PD) risk.
+
+### Objectives:
+
+* Calculation of correspondent LD-matrix (PLINK)
+* Detection of independent variants in studied loci
+* Application of statistical fine-mapping methods (FINEMAP, SuSiE)
+* Colocalization analysis (COLOC)
+* Implementation of Summary-based Mendelian Randomization (SMR)
+
 
 In order to perform this analysis further workflow was implemented:
 
@@ -23,7 +34,7 @@ In brief, we started from identification of independent variants with GCTA-COJO,
 
 For correct work of all scripts required libraries should be installed in R:
 ```console
-install.packages(c('optparse','RColorBrewer', 'data.table', 'dplyr', 'reshape', 'ggplot2', 'MASS', 'stringr', 'stats', 'tidyr')
+install.packages(c('optparse','RColorBrewer', 'data.table', 'dplyr', 'ggplot2', 'stringr', 'tidyr', 'coloc', 'colochelpR', 'dbplyr', 'tibble', 'purrr', 'locuscomparer', 'susieR', 'locuscomparer', 'magrittr'), 
 ```
 
 ## 1. Initial data
@@ -97,7 +108,7 @@ Colocalization analysis aims at finding the association between variants and gen
 
 ### COLOC
 
-We applied colocalization analysis with ~100 datasets of eQTL data from different tissues. Some of them were downloaded and prepared manually. For them ```make_coloc.sh``` was written, which launched ```make_coloc.R``` and outputs a dataframe with colocalization results for esch gene in a locus. 
+We applied colocalization analysis with ~100 datasets of eQTL data from different tissues. For them ```make_coloc.sh``` was written, which launched ```make_coloc.R``` and outputs a dataframe with colocalization results for esch gene in a locus. 
 
 ```console
 ./make_coloc.sh path_to_gwas path_to_dir_with_eQTLs output_path
@@ -112,19 +123,20 @@ Also it generates a list of SNPs that were found by COLOC to drive the colocaliz
 
 ![*Colocalization results*](figures/scarb2_emeta_coloc.png)
 
-Here we can see 4 SNPs that drive colocalization between SCARB2 region and  brain.
+For example, here we can see 4 SNPs that drive colocalization between SCARB2 region and  brain.
 
-Sometimes we got a lot of SNPs predicted by coloc to be significant dreivers of colocalization. In order to resolve LD structure between them and find only credible set of SNPs that drive the association, we applied SuSiE+COLOC framework (see run make_coloc_susie.html)
+Sometimes we got a lot of SNPs predicted by coloc to be significant drivers of colocalization. In order to resolve LD structure between them and find only credible set of SNPs that drive the association, we applied SuSiE+COLOC framework (see run make_coloc_susie.html)
 
 
 ### SMR 
-SMR (Summary-based Mendelian Randomization) takes LD-structure into account and it’s results can be interpreted as possible pleiotropy between 1 causal variant and transcription and phenotype.
+SMR (Summary-based Mendelian Randomization) takes LD-structure into account and the results can be interpreted as possible pleiotropy between 1 causal variant and transcription and phenotype.
 
-We used SMR with ~50 datasets using ```make_SMR.sh``` script. 
+We applied SMR to ~50 datasets using ```make_SMR.sh``` script. 
 
 ```console
 ./make_smr.sh path_to_LD path_to_gwas path_to_dir_with_eQTLs output_path
 ```
+
 **Args:**
 1-path to LD matrix
 2-path to GWAS sumstats
