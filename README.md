@@ -5,7 +5,7 @@ This project is aimed at identification of the most likely variants in SCARB2 an
 In order to perform this analysis further workflow was implemented:
 
 
-![*Workflow*](main_scheme.png)
+![*Workflow*](figures/main_scheme.png)
 
 
 In brief, we started from identification of independent variants with GCTA-COJO, following by statistical finemapping tools, such as FINEMAP and SuSiE. We continued with colocalization analysis via COLOC and Summary-based Mendelian Randomization (SMR). This approach allowed us to narrow down a number of the most likely SNPs that are responsible for asociation of these loci with PD risk.
@@ -17,7 +17,7 @@ In brief, we started from identification of independent variants with GCTA-COJO,
 * **SMR** (https://cnsgenomics.com/software/smr/#Overview) *Zhu Z, Zhang F, Hu H, Bakshi A, Robinson MR, Powell JE, Montgomery GW, Goddard ME, Wray NR, Visscher PM & Yang J (2016) Integration of summary data from GWAS and eQTL studies predicts complex trait gene targets.*
 * **COLOC** (https://chr1swallace.github.io/coloc/index.html) *C Wallace et. al (2012) Statistical colocalization of monocyte gene expression and genetic risk variants for type 1 diabetes*
 * **FINEMAP** (http://www.christianbenner.com/) *FINEMAP: Efficient variable selection using summary data from genome-wide association studies. Bioinformatics 32, 1493-1501 (2016)*
-* **LocusZoom** ()
+* **LocusZoom** (https://github.com/Geeketics/LocusZooms)
 * **1000 Genomes project** (http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/)
 
 
@@ -85,9 +85,9 @@ We ran FINEMAP with number of causal variants at each locus equals to the number
 
 Next we applied SuSiE. Since it is a package in R, you can learn how to carry out this step in ```run_susie.html``` file.
 
-The results of finemapping can be visualized with LocusZoom function ():
+The results of finemapping can be visualized with LocusZoom function (see locus_zoom_plot.R):
 
-![*Finemapping results*](SCARB2_finemap_GWAS.png)
+![*Finemapping results*](figures/SCARB2_finemap_GWAS.png)
 
 We can see that 1 independent variant was found in SCARB2 region (rs7654472). 95% credible set detected by FINEMAP is in red box, while SNPs predicted by SuSiE are highlighted with yellow.
 
@@ -110,7 +110,7 @@ We applied colocalization analysis with ~100 datasets of eQTL data from differen
 
 Also it generates a list of SNPs that were found by COLOC to drive the colocalization as well as locus zoom plots for significant colocalizations.
 
-![*Colocalization results*](scarb2_emeta_coloc.png)
+![*Colocalization results*](figures/scarb2_emeta_coloc.png)
 
 Here we can see 4 SNPs that drive colocalization between SCARB2 region and  brain.
 
@@ -131,9 +131,9 @@ We used SMR with ~50 datasets using ```make_SMR.sh``` script.
 3-path to directory with eQTLs
 4-output directory
 
-The results of this step can be visualized with histogram:
+The results of this step can be visualized with histogram (see SMR_plot.R):
 
-![*SMR results*](scarb2_locus_SMR.png)
+![*SMR results*](figures/scarb2_locus_SMR.png)
 
 According to the SMR output, expression of 3 genes *SCARB2*, *CCDC158* and *FAM47E* in brain may be driven by single mutations in this region that are associated with PD. 
 
