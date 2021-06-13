@@ -150,7 +150,15 @@ We applied SMR to ~50 datasets using ```make_SMR.sh``` script.
 3-path to directory with eQTLs
 4-output directory
 
-The results of this step can be visualized with histogram (see SMR_plot.R):
+The results of this step can be visualized as histogram. You can use ```SMR_plot.R``` from the command line in order to create a histogram for each tissue:
+
+```console
+Rscript SMR_plot.R input_path output_path
+```
+
+**Args:**
+1-path to SMR results: a directory with .smr output files
+2-path to output directory, where all figures will be stored
 
 ![*SMR results*](figures/scarb2_locus_SMR.png)
 
