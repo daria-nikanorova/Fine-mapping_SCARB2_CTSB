@@ -50,18 +50,18 @@ In order to calculate LD matrix we firstly created .bed/.bim/.fam files from .vc
 (all examples are shown for 1 locus)
 
 ```console
-plink --vcf ALL.chr4.phase3_shapeit2_mvncall_integrated_v5b.20130502.genotypes.vcf.gz --extract ctsb_1000kb_rs.tsv --make-bed --a2-allele ctsb_1000kb_rs_A2.tsv --keep eur_id.tsv --out ctsb_1000kb
+plink --vcf ALL.chr4.phase3_shapeit2_mvncall_integrated_v5b.20130502.genotypes.vcf.gz --extract rs.tsv --make-bed --a2-allele rs_A2.tsv --keep eur_id.tsv --out chr8
 ```
+
+```--extract``` extracts only SNPs in the locus
 
 ```--a2-allele``` allows to set other allele in order to calculate LD matrix with regard to ref/alt alleles from summary statistics
 
 Then we calculated LD matrix:
 
 ```console
-plink --bfile 1000G_chr4 --extract scarb2_1000kb_rs.tsv --r2 square spaces sumstats_subsets/1000kb_windows/ctsb_1000kb_rs_A2.tsv --keep eur_id.tsv --out ./LD_reference/1000G_calculated_de_novo_matrix_1703/ctsb_1000kb
+plink --bfile chr8 --r2 square spaces --keep eur_id.tsv --out ctsb_1000kb
 ```
-
-```--extract``` extract only SNPs in the locus
 
 ```--keep``` kepps only europeans by their ids (file with ids can be also found on ftp of 1000G)
 
@@ -71,8 +71,12 @@ plink --bfile 1000G_chr4 --extract scarb2_1000kb_rs.tsv --r2 square spaces sumst
 After data preprocessing we applied stepwise conditioning using genome-wide complex trait analysis (GCTA) with determined LD reference, to identify independent signals at the studied loci:
 
 ```console
-gcta64 --cojo-file sumstats_subsets/chromosomes/chr4_for_GCTA.tsv --bfile LD_reference/IPDGC_imputed/IPDGC_chr4 --cojo-slct --cojo-p 5e-5 --extract sumstats_subsets/1000kb_windows/scarb2_1000kb_chr_pos_min_maj_rsids.tsv --out gcta_output/SCARB2/chr4_IPDGC_scarb2_locus_gcta
+gcta64 --cojo-file chr8_for_GCTA.tsv --bfile ctsb_1000kb --cojo-slct --cojo-p 5e-5 --out ctsb_gcta
 ```
+
+```--cojo-file``` is GWAS summary statistics
+
+```--bfile``` is LD matrix
 
 ## 4. Fine-mapping
 
@@ -94,13 +98,16 @@ We ran FINEMAP with number of causal variants at each locus equals to the number
 
 ### SuSiE
 
-Next we applied SuSiE. Since it is a package in R, you can learn how to carry out this step in ```run_susie.html``` file.
+Next we applied SuSiE. Since it is a package in R, you can learn how to carry out this step in ```run_susie.html``` file. The results of finemapping can be visualized with LocusZoom function:
 
-The results of finemapping can be visualized with LocusZoom function (see locus_zoom_plot.R):
+![*Finemapping results*](figures/GWAS_FINEMAP_locus_plot.jpg)
 
-![*Finemapping results*](figures/SCARB2_finemap_GWAS.png)
+95% credible set detected by FINEMAP is in red circles, while SNPs predicted by SuSiE are labeled.
+*Note that for visualization we need LD table calculated between top SNP and all other SNPs in a region:*
 
-We can see that 1 independent variant was found in SCARB2 region (rs7654472). 95% credible set detected by FINEMAP is in red box, while SNPs predicted by SuSiE are highlighted with yellow.
+```console
+plink --bfile chr8 --r2 --out ctsb_top-hit_LD --ld-snp rs2645429 --ld-window 1000000000 --ld-window-kb 1000000000 --from-bp 76932863 --to-bp 77703432 --chr 8 --ld-window-r2 0
+```
 
 ## 5. Colocalization
 
