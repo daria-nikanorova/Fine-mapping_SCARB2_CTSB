@@ -98,7 +98,7 @@ We ran FINEMAP with number of causal variants at each locus equals to the number
 
 ### SuSiE
 
-Next we applied SuSiE. Since it is a package in R, you can learn how to carry out this step in ```run_susie.html``` file. The results of finemapping can be visualized with LocusZoom function:
+Next we applied SuSiE. Since it is a package in R, you can learn how to carry out this step in ```make_susie.html``` file in ```SUSIE``` directory. The results of finemapping can be visualized with LocusZoom function:
 
 ![*Finemapping results*](figures/GWAS_FINEMAP_locus_plot.jpg)
 
@@ -115,7 +115,7 @@ Colocalization analysis aims at finding the association between variants and gen
 
 ### COLOC
 
-We applied colocalization analysis with ~100 datasets of eQTL data from different tissues. We wrote a bash script ```make_coloc.sh``` , which loops over eQTL datasets, launches ```make_coloc.R``` and outputs a dataframe with colocalization results for each gene in a locus. 
+We applied colocalization analysis with ~100 datasets of eQTL data from different tissues. We wrote a bash script ```make_coloc.sh``` , which loops over eQTL datasets, launches ```make_coloc.R``` and outputs a dataframe with colocalization results for each gene in a locus. You can find both scripts in ```COLOC``` directory. 
 
 ```console
 ./make_coloc.sh path_to_gwas path_to_dir_with_eQTLs output_path
@@ -123,7 +123,9 @@ We applied colocalization analysis with ~100 datasets of eQTL data from differen
 
 **Args:**
 1-path to GWAS sumstats
+
 2-path to directory with eQTLs
+
 3-output directory
 
 Also it generates a list of SNPs that were found by COLOC to drive the colocalization as well as locus zoom plots for significant colocalizations.
@@ -132,13 +134,13 @@ Also it generates a list of SNPs that were found by COLOC to drive the colocaliz
 
 For example, here we can see 4 SNPs that drive colocalization between SCARB2 region and  brain.
 
-Sometimes we got a lot of SNPs predicted by coloc to be significant drivers of colocalization. In order to resolve LD structure between them and find only credible set of SNPs that drive the association, we applied SuSiE+COLOC framework (see run make_coloc_susie.html)
+Sometimes we got a lot of SNPs predicted by coloc to be significant drivers of colocalization. In order to resolve LD structure between them and find only credible set of SNPs that drive the association, we applied SuSiE+COLOC framework (see ```make_coloc_susie.html``` in ```SUSIE``` directory)
 
 
 ### SMR 
 SMR (Summary-based Mendelian Randomization) takes LD-structure into account and the results can be interpreted as possible pleiotropy between 1 causal variant and transcription and phenotype.
 
-We applied SMR to ~50 datasets using ```make_SMR.sh``` script. 
+We applied SMR to ~50 datasets using ```make_SMR.sh``` script (```SMR``` directory). 
 
 ```console
 ./make_smr.sh path_to_LD path_to_gwas path_to_dir_with_eQTLs output_path
@@ -146,11 +148,14 @@ We applied SMR to ~50 datasets using ```make_SMR.sh``` script.
 
 **Args:**
 1-path to LD matrix
+
 2-path to GWAS sumstats
+
 3-path to directory with eQTLs
+
 4-output directory
 
-The results of this step can be visualized as histogram. You can use ```SMR_plot.R``` from the command line in order to create a histogram for each tissue:
+The results of this step can be visualized as histogram. You can use ```SMR_plot.R``` (```SMR``` directory) from the command line in order to create a histogram for each tissue:
 
 ```console
 Rscript SMR_plot.R input_path output_path
