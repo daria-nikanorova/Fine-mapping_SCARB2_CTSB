@@ -1,15 +1,18 @@
+#!/usr/bin/env Rscript
+args = commandArgs(trailingOnly=TRUE)
+
 # Add libraries
 library(stringr)
 library(dplyr)
 library(ggplot2)
 
 # Set path to working directory with .smr files from SMR analysis with different tissues
-current_path <- "your_path_to_SMR_results"
-setwd(current_path)
+input_path <- args[1]
+output_path <- args[2]
 
 # Create a list of files from SMR analysis
-SMR_files <- list.files(path = current_path, pattern="*.smr\\b", ignore.case = T, full.names = T)
-
+SMR_files <- list.files(path = input_path, pattern="*.smr\\b", ignore.case = T, full.names = T)
+print(SMR_files)
 # Read them all and create a list
 list_of_SMR_files <- lapply(SMR_files, function(x) read.table(x, header = TRUE, sep = "\t", ))
 
@@ -36,9 +39,10 @@ for (i in 1:length(SMR_files)){
           legend.position = "none") +
     geom_hline(yintercept = 4, linetype = 2, color = "#d73027", size = 0.7)
   
-  # Save plot to a working directory
+  # Save plot to the output directory
   plot_name <- str_replace(basename(SMR_files[i]), ".smr\\b", ".pdf")
-  ggsave(filename = plot_name, plot = my_plot, device = "pdf", width = 6, height = 3)
+  plot_path <- str_c(output_path, '/', plot_name)
+  ggsave(filename = plot_path, plot = my_plot, device = "pdf", width = 6, height = 3)
 }
 
 # If you want to visualize the results of HEIDI test as well, just change the variable for y axis to log_pHEIDI
